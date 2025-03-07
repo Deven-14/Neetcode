@@ -17,3 +17,6 @@ class Solution:
             max_length = max(max_length, right - left + 1)
         
         return max_length
+
+
+# https://youtu.be/gqXU1UyA8pk
