@@ -22,6 +22,9 @@ class Solution:
 from collections import Counter
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
+        if len(s2) < len(s1):
+            return False
+        
         s1_counts = [0] * 26
         left = 0
         window_char_counts = [0] * 26
