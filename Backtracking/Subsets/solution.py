@@ -47,3 +47,22 @@ class Solution:
         dfs(0)
         return sub_sets
 
+
+class Solution:
+
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        n = len(nums)
+        subsets = []
+        subset = []
+
+        def backtrack(i):
+            subsets.append(list(subset))
+
+            for j in range(i, n):
+                subset.append(nums[j])
+                backtrack(j+1)
+                subset.pop()
+            
+        backtrack(0)
+        return subsets
+
