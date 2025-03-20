@@ -31,8 +31,8 @@ class Solution:
         MAX = (1 << 31) - 1
 
         MAX_div_10 = MAX // 10
-        MAX_mod_10 = MAX % 10
-        MIN_mod_10 = 8 # as -2147483648
+        last_digit_for_pos = MAX % 10
+        last_digit_for_neg = 8 # as -2147483648
 
         is_negative = False
         if x < 0:
@@ -44,10 +44,10 @@ class Solution:
             digit = x % 10
             x //= 10
 
-            if not is_negative and (res > MAX_div_10 or (res == MAX_div_10 and digit > MAX_mod_10)):
+            if not is_negative and (res > MAX_div_10 or (res == MAX_div_10 and digit > last_digit_for_pos)):
                 return 0
             
-            elif is_negative and (res > MAX_div_10 or (res == MAX_div_10 and digit > MIN_mod_10)):
+            elif is_negative and (res > MAX_div_10 or (res == MAX_div_10 and digit > last_digit_for_neg)):
                 return 0
             
             res = (res * 10) + digit
