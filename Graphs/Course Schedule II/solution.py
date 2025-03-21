@@ -27,7 +27,7 @@ class Solution:
                 if indegrees[dependent_course] == 0:
                     queue.append(dependent_course)
         
-        if len(stack) != numCourses:
+        if len(stack) != numCourses: # * if there is a CYCLE in the graph, then the stack will not have all the courses
             return []
 
         return stack[::-1]
