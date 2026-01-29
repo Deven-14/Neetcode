@@ -65,3 +65,34 @@ class Solution:
                 return False # indicating that the solution is not possible
         
         return True
+
+
+
+# * Khan's Algorithm doesn't require visited array
+# * without visited array
+
+from collections import deque
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        adj = [[] for _ in range(numCourses)]
+        indegrees = [0] * numCourses
+
+        for course, dependent_course in prerequisites:
+            adj[course].append(dependent_course)
+            indegrees[dependent_course] += 1
+        
+        queue = deque()
+        for course, indegree in enumerate(indegrees):
+            if indegree == 0:
+                queue.append(course)
+        
+        completed = 0
+        while queue:
+            course = queue.popleft()
+            completed += 1            
+            for dependent_course in adj[course]:
+                indegrees[dependent_course] -= 1
+                if indegrees[dependent_course] == 0:
+                    queue.append(dependent_course)
+        
+        return completed == numCourses
