@@ -144,3 +144,34 @@ class Solution:
 # * TOPOLOGICAL SORT DFS
 # * Time Complexity: O(V + E)
 
+
+
+# * topological sort doesn't require visited
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        adj = [[] for _ in range(numCourses)]
+        indegrees = [0] * numCourses
+
+        for course, dependent_course in prerequisites:
+            adj[course].append(dependent_course)
+            indegrees[dependent_course] += 1
+        
+        queue = deque()
+        for course, indegree in enumerate(indegrees):
+            if indegree == 0:
+                queue.append(course)
+        
+        stack = []
+        while queue:
+            course = queue.popleft()
+            stack.append(course)
+
+            for dependent_course in adj[course]:
+                indegrees[dependent_course] -= 1
+                if indegrees[dependent_course] == 0:
+                    queue.append(dependent_course)
+        
+        if len(stack) != numCourses:
+            return []
+
+        return stack[::-1]
