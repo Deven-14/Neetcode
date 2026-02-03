@@ -1,3 +1,5 @@
+
+# * dfs
 from functools import cache
 class Solution:
     def checkIfPrerequisite(self, numCourses: int, prerequisites: List[List[int]], queries: List[List[int]]) -> List[bool]:
@@ -20,6 +22,7 @@ class Solution:
         return [dfs(a, b) for a, b in queries]
 
 
+# * Topological sort
 from collections import deque
 class Solution:
     def checkIfPrerequisite(self, numCourses: int, prerequisites: List[List[int]], queries: List[List[int]]) -> List[bool]:
@@ -46,4 +49,20 @@ class Solution:
         
         return [u in pre_reqs[v] for u, v in queries]
 
+
+
+# * Floyd Warshall Algorithm
+class Solution:
+    def checkIfPrerequisite(self, numCourses: int, prerequisites: List[List[int]], queries: List[List[int]]) -> List[bool]:
+        adj = [[False] * numCourses for _ in range(numCourses)]
+
+        for a, b in prerequisites:
+            adj[a][b] = True
+                
+        for mid in range(numCourses):
+            for i in range(numCourses):
+                for j in range(numCourses):
+                    adj[i][j] = adj[i][j] or (adj[i][mid] and adj[mid][j])
+        
+        return [adj[u][v] for u, v in queries]
 
