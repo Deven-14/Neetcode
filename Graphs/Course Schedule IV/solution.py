@@ -18,3 +18,32 @@ class Solution:
             return False
         
         return [dfs(a, b) for a, b in queries]
+
+
+from collections import deque
+class Solution:
+    def checkIfPrerequisite(self, numCourses: int, prerequisites: List[List[int]], queries: List[List[int]]) -> List[bool]:
+        adj = [set() for _ in range(numCourses)]
+        indegrees = [0] * numCourses
+        pre_reqs = [set() for _ in range(numCourses)]
+
+        for a, b in prerequisites:
+            adj[a].add(b)
+            indegrees[b] += 1
+        
+        queue = deque(i for i, indegree in enumerate(indegrees) if indegree == 0)
+        
+        while queue:
+            node = queue.popleft()
+            
+            for dependent in adj[node]:
+                pre_reqs[dependent].add(node)
+                pre_reqs[dependent].update(pre_reqs[node])
+                
+                indegrees[dependent] -= 1
+                if indegrees[dependent] == 0:
+                    queue.append(dependent)
+        
+        return [u in pre_reqs[v] for u, v in queries]
+
+
