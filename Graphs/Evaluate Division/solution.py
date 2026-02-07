@@ -108,3 +108,22 @@ class Solution:
 
 
 
+from collections import defaultdict
+from itertools import chain
+
+class Solution:
+    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+        variables = set(x for x in chain.from_iterable(equations))
+        adj = defaultdict(lambda: defaultdict(int))
+        
+        for (x, y), value in zip(equations, values):
+            adj[x][y] = value
+            adj[y][x] = 1 / value
+        
+        for mid in variables:
+            for x in variables:
+                for y in variables:
+                    adj[x][y] = adj[x][y] or adj[x][mid] * adj[mid][y]
+        
+        return [-1 if x not in variables or y not in variables or adj[x][y] == 0 else adj[x][y] for x, y in queries]
+
