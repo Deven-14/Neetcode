@@ -152,3 +152,42 @@ class Solution:
 
 # * Best solution is Dijkstra's algorithm with early stopping
 # * time complexity: O((v + e)logv)
+
+
+
+from collections import deque
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        adj = [[] for _ in range(n+1)]
+        
+        for (ui, vi, ti) in times:
+            adj[ui].append((vi, ti))
+        
+        # SPFA - shortest path faster algorithm
+        
+        queue = deque([k])
+        in_queue = [False] * (n+1)
+        in_queue[k] = True
+
+        INF = float("inf")
+        min_times = [INF] * (n+1) # equavalent of distances
+        min_times[k] = 0
+
+        while queue:
+            u = queue.popleft()
+            in_queue[u] = False
+            time = min_times[u]
+
+            for v, t in adj[u]:
+                total_time = time + t
+                if total_time < min_times[v]:
+                    min_times[v] = total_time
+
+                    if not in_queue[v]:
+                        queue.append(v)
+                        in_queue[v] = True
+        
+        min_time_required = max(min_times[1:]) # for all nodes to recieve
+        # min for all nodes to receive will be max of min_times
+
+        return min_time_required if min_time_required != INF else -1
