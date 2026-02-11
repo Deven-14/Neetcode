@@ -153,3 +153,98 @@ class Solution:
         return l
         
 
+
+
+class DisjointSetUnion:
+    def __init__(self, n):
+        self.parents = [-1] * n # or list(rnage(n))
+        self.size = [0] * n
+    
+    def find(self, x):
+        if self.parents[x] == -1: # or == x
+            return x
+        self.parents[x] = self.find(self.parents[x])
+        return self.parents[x]
+    
+    def union(self, x, y):
+        px = self.find(x)
+        py = self.find(y)
+        if px == py:
+            return 
+        
+        if self.size[px] < self.size[py]:
+            px, py = py, px
+        
+        self.parents[py] = px
+        self.size[px] += self.size[py]
+
+
+
+
+class Solution:
+    def minimumEffortPath(self, heights: List[List[int]]) -> int:
+        # * Kruskal's Algorithm
+        ROWS, COLS = len(heights), len(heights[0])
+
+        edges = []
+        for r in range(ROWS):
+            for c in range(COLS):
+                if r+1 < ROWS:
+                    edges.append((
+                        abs(heights[r][c] - heights[r + 1][c]),
+                        r * COLS + c,
+                        (r + 1) * COLS + c
+                    ))
+                if c+1 < COLS:
+                    edges.append((
+                        abs(heights[r][c] - heights[r][c+1]),
+                        r * COLS + c,
+                        r * COLS + c + 1
+                    ))
+
+        edges.sort()
+
+        dsu = DisjointSetUnion(ROWS * COLS)
+        start, end = 0, ROWS * COLS - 1
+        for weight, u, v in edges:
+            dsu.union(u, v)
+            if dsu.find(start) == dsu.find(end):
+                return weight
+        
+        return 0
+        
+
+
+
+from collections import deque
+class Solution:
+    def minimumEffortPath(self, heights: List[List[int]]) -> int:
+        # * SPFA - Shortest path faster algorithm
+        ROWS, COLS = len(heights), len(heights[0])
+
+        efforts = [[float('inf')] * COLS for _ in range(ROWS)]
+        efforts[0][0] = 0
+
+        queue = deque([(0, 0)])
+        in_queue = [[False] * COLS for _ in range(ROWS)]
+        in_queue[0][0] = True
+
+        while queue:
+            i, j = queue.popleft()
+            in_queue[i][j] = False
+            
+            for x, y in ((i+1, j), (i-1, j), (i, j+1), (i, j-1)):
+                if x < 0 or x >= ROWS or y < 0 or y >= COLS:
+                    continue
+                
+                effort = abs(heights[i][j] - heights[x][y])
+                max_effort = max(efforts[i][j], effort)
+
+                if max_effort < efforts[x][y]:
+                    efforts[x][y] = max_effort
+
+                    if not in_queue[x][y]:
+                        queue.append((x, y))
+                        in_queue[x][y] = True
+            
+        return efforts[ROWS-1][COLS-1]
