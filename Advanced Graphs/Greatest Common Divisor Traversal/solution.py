@@ -3,7 +3,7 @@ from math import gcd
 class DisjointSetUnion:
     def __init__(self, n):
         self.parents = [-1] * n
-        self.size = [0] * n
+        self.size = [1] * n
         self.components = n
     
     def find(self, x):
@@ -48,7 +48,7 @@ from collections import defaultdict
 class DisjointSetUnion:
     def __init__(self, n):
         self.parents = [-1] * n
-        self.size = [0] * n
+        self.size = [1] * n
     
     def find(self, x):
         if self.parents[x] == -1:

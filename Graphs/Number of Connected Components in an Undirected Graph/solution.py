@@ -2,7 +2,7 @@ class DisjointSetUnion:
 
     def __init__(self, n):
         self.parents = list(range(n))
-        self.size = [0] * n
+        self.size = [1] * n
         self._components = n
     
     def find(self, x):
