@@ -248,3 +248,35 @@ class Solution:
                         in_queue[x][y] = True
             
         return efforts[ROWS-1][COLS-1]
+
+
+
+# * efficient Dijkstra's algorithm
+
+import heapq
+class Solution:
+    def minimumEffortPath(self, heights: List[List[int]]) -> int:
+        ROWS, COLS = len(heights), len(heights[0])
+        min_efforts = [[float('inf')] * COLS for _ in range(ROWS)]
+        min_efforts[0][0] = 0
+        min_heap = [(0, 0, 0)]
+
+        while min_heap:
+            curr_min_effort, i, j = heapq.heappop(min_heap)
+            if curr_min_effort > min_efforts[i][j]:
+                continue
+
+            if i == ROWS-1 and j == COLS-1:
+                return curr_min_effort
+
+            routes = ((i+1, j), (i-1, j), (i, j+1), (i, j-1))
+            for x, y in routes:
+                if x < 0 or x >= ROWS or y < 0 or y >= COLS:
+                    continue
+                min_effort = max(curr_min_effort, abs(heights[i][j] - heights[x][y]))
+                if min_effort < min_efforts[x][y]:
+                    min_efforts[x][y] = min_effort
+                    heapq.heappush(min_heap, (min_effort, x, y))
+
+        return 0
+        
