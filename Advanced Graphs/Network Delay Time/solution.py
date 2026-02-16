@@ -191,3 +191,38 @@ class Solution:
         # min for all nodes to receive will be max of min_times
 
         return min_time_required if min_time_required != INF else -1
+
+
+
+# * Dijkstra's proper algorithm
+
+import heapq
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        adj = [[] for _ in range(n+1)]
+        
+        for (ui, vi, ti) in times:
+            adj[ui].append((vi, ti))
+        
+        # Dijkstra's algo
+        
+        # add the source node to the heapq
+        min_heap = [(0, k)] # k to k is 0
+        min_times = [float("inf")] * (n+1) # equavalent of distances
+        min_times[k] = 0
+
+        while min_heap:
+            curr_time, node = heapq.heappop(min_heap)
+            if curr_time > min_times[node]:
+                continue
+
+            for adj_node, adj_time in adj[node]:
+                time = curr_time + adj_time
+                if time < min_times[adj_node]:
+                    min_times[adj_node] = time
+                    heapq.heappush(min_heap, (time, adj_node))
+        
+        min_time_required = max(min_times[1:]) # for all nodes to recieve
+        # min for all nodes to receive will be max of min_times
+
+        return min_time_required if min_time_required != float("inf") else -1
