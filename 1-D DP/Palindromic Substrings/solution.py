@@ -81,3 +81,31 @@ class Solution:
     
 # time complexity: O(n)
 # space complexity: O(n)
+
+
+
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        # manacher's algorithm
+        T = "^#" + '#'.join(list(s)) + "#$" # transformed s to help with even length palindrome
+        n = len(T)
+        P = [0] * n # longest palindrome array
+        C, R = 0, 0 # center and right edge of the current longest palindrome
+
+        for i in range(1, n-1):
+            mirror = 2 * C - i
+
+            if i < R: # if current is less than right edge
+                P[i] = min(R - i, P[mirror])
+            
+            while T[i - P[i] - 1] == T[i + P[i] + 1]:
+                P[i] += 1
+            
+            if i + P[i] > R:
+                C, R = i, i + P[i]
+        
+        count = 0
+        for length in P:
+            count += (length + 1) // 2
+        
+        return count
