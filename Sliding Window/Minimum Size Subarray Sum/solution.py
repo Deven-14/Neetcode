@@ -17,3 +17,7 @@ class Solution:
                 window_sum -= window.popleft()
 
         return min_length
+
+
+# this can also be done using prefix_sums dict
+# like the qustion for 1. Subarray sum equals k
