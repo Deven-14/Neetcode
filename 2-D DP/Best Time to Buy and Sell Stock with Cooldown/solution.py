@@ -47,3 +47,27 @@ class Solution:
         
         return dfs(0, True)
 
+
+
+from functools import cache
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        n = len(prices)
+        
+        @cache
+        def dp(i, buy):
+            if i >= n:
+                return 0
+            
+            if buy:
+                return max(
+                    dp(i + 1, not buy) - prices[i],
+                    dp(i + 1, buy)
+                )
+            
+            return max(
+                prices[i] + dp(i + 2, not buy), # not buy => not False => True => we should buy
+                dp(i + 1, buy) # buy => False => we should sell
+            )
+        
+        return dp(0, True)
