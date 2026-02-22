@@ -111,6 +111,39 @@ class Solution:
         
         return max_path
 
+
+
+from functools import cache
+class Solution:
+    def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
+        n = len(matrix)
+        m = len(matrix[0])
+        
+        @cache
+        def dfs(i, j, prev_value):
+            if i < 0 or i == n or j < 0 or j == m:
+                return 0
+            
+            if matrix[i][j] <= prev_value:
+                return 0
+
+            return 1 + max(
+                dfs(i, j+1, matrix[i][j]),
+                dfs(i, j-1, matrix[i][j]),
+                dfs(i+1, j, matrix[i][j]),
+                dfs(i-1, j, matrix[i][j])
+            )
+        
+        max_path = 0
+        for i in range(n):
+            for j in range(m):
+                max_path = max(max_path, dfs(i, j, float("-inf")))
+        
+        return max_path
+
+
+
+
 # TODO: try to implement using kahn's algorithm, topological sort
 # * take the indegree as the number of incoming edges from a lesser value to a greater value
 
