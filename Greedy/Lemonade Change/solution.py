@@ -17,3 +17,25 @@ class Solution:
                     return False
         
         return True
+
+
+class Solution:
+    def lemonadeChange(self, bills: List[int]) -> bool:
+        five, ten = 0, 0
+
+        for bill in bills:
+            match bill:
+                case 5:
+                    five += 1
+                case 10 if five > 0:
+                    ten += 1
+                    five -= 1
+                case 20 if ten > 0 and five > 0:
+                    ten -= 1
+                    five -= 1
+                case 20 if five >= 3:
+                    five -= 3
+                case _:
+                    return False
+        
+        return True
