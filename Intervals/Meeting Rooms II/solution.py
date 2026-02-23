@@ -68,3 +68,7 @@ class Solution:
         return min_days_required
 
 
+# * If we process these timelines in order:
+
+# * whenever a meeting starts before another one ends, we need a new room
+# * whenever a meeting ends before or at the same time another starts, a room becomes free
