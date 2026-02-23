@@ -41,3 +41,53 @@ class Solution:
         new_intervals.extend(intervals[i:])
         
         return new_intervals
+
+
+class Solution:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        new_intervals = []
+        i, n = 0, len(intervals)
+
+        while i < n and newInterval[0] > intervals[i][1]:
+            new_intervals.append(intervals[i])
+            i += 1
+        
+        if i < n and newInterval[1] >= intervals[i][0]:
+            newInterval[0] = min(intervals[i][0], newInterval[0])
+            newInterval[1] = max(intervals[i][1], newInterval[1])
+            i += 1
+
+        while i < n and newInterval[1] >= intervals[i][0]:
+            newInterval[1] = max(intervals[i][1], newInterval[1])
+            i += 1
+        
+        new_intervals.append(newInterval)
+        new_intervals.extend(intervals[i:])
+        
+        return new_intervals
+
+
+# * with binary search
+
+from bisect import bisect_left
+class Solution:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        new_intervals = []
+        i, n = 0, len(intervals)
+
+        i = bisect_left(intervals, newInterval[0], key=lambda x: x[1])
+        new_intervals.extend(intervals[:i])
+        
+        if i < n and newInterval[1] >= intervals[i][0]:
+            newInterval[0] = min(intervals[i][0], newInterval[0])
+            newInterval[1] = max(intervals[i][1], newInterval[1])
+            i += 1
+
+        while i < n and newInterval[1] >= intervals[i][0]:
+            newInterval[1] = max(intervals[i][1], newInterval[1])
+            i += 1
+        
+        new_intervals.append(newInterval)
+        new_intervals.extend(intervals[i:])
+        
+        return new_intervals
