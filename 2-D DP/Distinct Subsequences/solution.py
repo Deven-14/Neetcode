@@ -44,3 +44,25 @@ class Solution:
 
 # * Good example of converting a recursive solution to a bottom-up DP solution
 # * The recursive solution is easier to understand and write
+
+
+from functools import cache
+class Solution:
+    def numDistinct(self, s: str, t: str) -> int:
+        n = len(s)
+        m = len(t)
+        
+        @cache
+        def backtrack(i, j):
+            if j == m:
+                return 1
+            
+            if i == n or (n - i) < (m - j):
+                return 0
+            
+            if s[i] == t[j]:
+                return backtrack(i+1, j+1) + backtrack(i+1, j)
+            
+            return backtrack(i+1, j)
+        
+        return backtrack(0, 0)
